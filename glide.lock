@@ -1,0 +1,20 @@
+hash: 12d3c87a8e9b8aee848144894b725dde8c77480c8dcd4432b50bf592ed1f18c9
+updated: 2017-01-31T18:41:07.540952995+01:00
+imports:
+- name: github.com/fatih/color
+  version: 34e4ee095d12986a2cef5ddb9aeb3b8cfcfea17c
+- name: github.com/mattn/go-colorable
+  version: ed8eb9e318d7a84ce5915b495b7d35e0cfe7b5a8
+- name: github.com/mattn/go-isatty
+  version: 30a891c33c7cde7b02a981314b4228ec99380cca
+- name: github.com/satori/go.uuid
+  version: 879c5887cd475cd7864858769793b2ceb0d44feb
+- name: github.com/Sirupsen/logrus
+  version: d26492970760ca5d33129d2d799e34be5c4782eb
+- name: github.com/urfave/cli
+  version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
+- name: golang.org/x/sys
+  version: a408501be4d17ee978c04a618e7a1b22af058c0e
+  subpackages:
+  - unix
+testImports: []
