@@ -8,10 +8,10 @@ const (
 	helloFresh = "hellofresh"
 )
 
-func Create(name string) Provider {
+func Create(providerURL string, name string) Provider {
 	switch strings.ToLower(name) {
 	case helloFresh:
-		return NewHelloFresh()
+		return NewHelloFresh(providerURL)
 	default:
 		return nil
 	}

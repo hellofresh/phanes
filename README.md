@@ -39,7 +39,7 @@ Just place the binary in your $PATH and you are good to go.
 After you have *phanes* up and running we can create our first client. Let's see how we can create a new client:
 
 ```sh
-phanes create -p "hellofresh" -n "Example" -u "http://localhost/callback"
+phanes -u "http://localhost:8000/clients/" -p "hellofresh" create -n "Test 1"
 ```
 
 This command should return something like:

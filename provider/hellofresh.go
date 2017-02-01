@@ -16,8 +16,6 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-const url = "http://localhost:8000/clients/"
-
 type HelloFreshClient struct {
 	ID          uuid.UUID `json:"id"`
 	Secret      string    `json:"secret"`
@@ -34,13 +32,16 @@ func (c *HelloFreshClient) GetSecret() string {
 }
 
 type HelloFresh struct {
+	url    string
 	client *http.Client
 }
 
-func NewHelloFresh() *HelloFresh {
-	return &HelloFresh{&http.Client{
-		Timeout: time.Second * 10,
-	}}
+func NewHelloFresh(url string) *HelloFresh {
+	return &HelloFresh{
+		url,
+		&http.Client{
+			Timeout: time.Second * 10,
+		}}
 }
 
 func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
@@ -60,7 +61,7 @@ func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequest("POST", p.url, bytes.NewBuffer(jsonStr))
 	resp, err := p.client.Do(req)
 	if err != nil {
 		return nil, err
@@ -79,7 +80,7 @@ func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 }
 
 func (p *HelloFresh) Delete(id string) error {
-	req, err := http.NewRequest("DELETE", url+id, nil)
+	req, err := http.NewRequest("DELETE", p.url+id, nil)
 	resp, err := p.client.Do(req)
 	if err != nil {
 		return err

@@ -17,6 +17,19 @@ func main() {
 	app.Copyright = "HelloFresh SE"
 	app.Email = "il@hellofresh.com"
 
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:  "provider, p",
+			Value: "hellofresh",
+			Usage: "The authentication provider to create the oauth client",
+		},
+		cli.StringFlag{
+			Name:   "provider-url, u",
+			Usage:  "The identity provider client endpoint",
+			EnvVar: "PROVIDER_URL",
+		},
+	}
+
 	app.Commands = []cli.Command{
 		{
 			Name:    "create",
@@ -24,23 +37,18 @@ func main() {
 			Usage:   "Creates a new oauth client",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "provider, p",
-					Value: "hellofresh",
-					Usage: "The authentication provider to create the oauth client",
-				},
-				cli.StringFlag{
 					Name:   "name, n",
 					Usage:  "The client name",
 					EnvVar: "CLIENT_NAME",
 				},
 				cli.StringFlag{
-					Name:  "redirect-url, u",
+					Name:  "redirect-url, r",
 					Value: "http://localhost",
 					Usage: "The callback url",
 				},
 			},
 			Action: func(c *cli.Context) error {
-				provider := provider.Create(c.String("provider"))
+				provider := provider.Create(c.GlobalString("provider-url"), c.GlobalString("provider"))
 				if provider == nil {
 					color.Red("Invalid provider selected, please choose a valid provider")
 					return nil
@@ -74,7 +82,7 @@ func main() {
 				},
 			},
 			Action: func(c *cli.Context) error {
-				provider := provider.Create(c.String("provider"))
+				provider := provider.Create(c.GlobalString("provider-url"), c.GlobalString("provider"))
 				if provider == nil {
 					color.Red("Invalid provider selected, please choose a valid provider")
 					return nil
