@@ -24,10 +24,10 @@ _testmain.go
 *.prof
 gin-bin
 
+_book
 /vendor
 
 # HF config files
 ci/vars_enc.yml
-/out
+/dist
 debug
-phanes
