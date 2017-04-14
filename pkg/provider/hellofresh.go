@@ -12,10 +12,11 @@ import (
 	"encoding/json"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/hellofresh/phanes/generator"
+	"github.com/hellofresh/phanes/pkg/generator"
 	uuid "github.com/satori/go.uuid"
 )
 
+// HelloFreshClient represents the hellofresh client
 type HelloFreshClient struct {
 	ID          uuid.UUID `json:"id"`
 	Secret      string    `json:"secret"`
@@ -23,19 +24,23 @@ type HelloFreshClient struct {
 	RedirectURI string    `json:"redirect_uri"`
 }
 
+// GetID retrieves the client's ID
 func (c *HelloFreshClient) GetID() string {
 	return c.ID.String()
 }
 
+// GetSecret retreives the client's secret
 func (c *HelloFreshClient) GetSecret() string {
 	return c.Secret
 }
 
+// HelloFresh represents a provider
 type HelloFresh struct {
 	url    string
 	client *http.Client
 }
 
+// NewHelloFresh creates a new instance of HelloFresh
 func NewHelloFresh(url string) *HelloFresh {
 	return &HelloFresh{
 		url,
@@ -44,13 +49,14 @@ func NewHelloFresh(url string) *HelloFresh {
 		}}
 }
 
+// Create a client
 func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 	log.SetOutput(os.Stdout)
 	log.SetLevel(log.DebugLevel)
 
 	client := new(HelloFreshClient)
 	client.ID = uuid.NewV4()
-	client.Secret = fmt.Sprintf("%x", generator.GenerateSecret())
+	client.Secret = fmt.Sprintf("%x", generator.GenerateSecret(client.ID.String()))
 	client.Extra = name
 	client.RedirectURI = redirectURI
 	s := client.GetSecret()
@@ -79,7 +85,8 @@ func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 	return client, nil
 }
 
-func (p *HelloFresh) Delete(id string) error {
+// Remove a client
+func (p *HelloFresh) Remove(id string) error {
 	req, err := http.NewRequest("DELETE", p.url+id, nil)
 	resp, err := p.client.Do(req)
 	if err != nil {
