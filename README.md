@@ -53,7 +53,7 @@ Client Secret: 03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4
 If you want to delete a client you simply need to call
 
 ```sh
-phanes delete -p "hellofresh" -id 69278640-eff2-4bc3-b6ef-a12c86810324
+phanes -u "http://localhost:8000/clients/" -p "hellofresh" delete --id 69278640-eff2-4bc3-b6ef-a12c86810324
 ```
 
 ## Contributing
