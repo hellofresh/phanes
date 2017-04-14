@@ -1,20 +1,14 @@
-hash: 12d3c87a8e9b8aee848144894b725dde8c77480c8dcd4432b50bf592ed1f18c9
-updated: 2017-01-31T18:41:07.540952995+01:00
+hash: 706831c4d425af2ecaf1bac2fffc388016dd2c834dae53529bb8ee21ad1d6ecf
+updated: 2017-04-14T13:27:05.528442262+02:00
 imports:
 - name: github.com/fatih/color
-  version: 34e4ee095d12986a2cef5ddb9aeb3b8cfcfea17c
+  version: 9131ab34cf20d2f6d83fdc67168a5430d1c7dc23
 - name: github.com/mattn/go-colorable
-  version: ed8eb9e318d7a84ce5915b495b7d35e0cfe7b5a8
-- name: github.com/mattn/go-isatty
-  version: 30a891c33c7cde7b02a981314b4228ec99380cca
+  version: d228849504861217f796da67fae4f6e347643f15
 - name: github.com/satori/go.uuid
   version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: github.com/Sirupsen/logrus
-  version: d26492970760ca5d33129d2d799e34be5c4782eb
-- name: github.com/urfave/cli
-  version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
-- name: golang.org/x/sys
-  version: a408501be4d17ee978c04a618e7a1b22af058c0e
-  subpackages:
-  - unix
+  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
+- name: github.com/spf13/cobra
+  version: 7be4beda01ec05d0b93d80b3facd2b6f44080d94
 testImports: []
