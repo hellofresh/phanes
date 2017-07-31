@@ -2,6 +2,7 @@ package provider
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -9,11 +10,9 @@ import (
 	"os"
 	"time"
 
-	"encoding/json"
-
-	log "github.com/Sirupsen/logrus"
 	"github.com/hellofresh/phanes/pkg/generator"
-	uuid "github.com/satori/go.uuid"
+	"github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 )
 
 // HelloFreshClient represents the hellofresh client
@@ -29,7 +28,7 @@ func (c *HelloFreshClient) GetID() string {
 	return c.ID.String()
 }
 
-// GetSecret retreives the client's secret
+// GetSecret retrieves the client's secret
 func (c *HelloFreshClient) GetSecret() string {
 	return c.Secret
 }
@@ -78,7 +77,7 @@ func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		resp.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
 
-		log.Debug(string(bodyBytes))
+		log.WithFields(log.Fields{"status": resp.StatusCode, "headers": resp.Header, "body": string(bodyBytes)})
 		return nil, errors.New("Client not created")
 	}
 
