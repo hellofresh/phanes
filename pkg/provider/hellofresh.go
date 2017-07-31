@@ -10,6 +10,8 @@ import (
 	"os"
 	"time"
 
+	"strings"
+
 	"github.com/hellofresh/phanes/pkg/generator"
 	"github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
@@ -66,7 +68,7 @@ func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", p.url, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequest(http.MethodPost, p.url, bytes.NewBuffer(jsonStr))
 	resp, err := p.client.Do(req)
 	if err != nil {
 		return nil, err
@@ -86,7 +88,14 @@ func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 
 // Remove a client
 func (p *HelloFresh) Remove(id string) error {
-	req, err := http.NewRequest("DELETE", p.url+id, nil)
+	var rmUrl string
+	if strings.HasSuffix(p.url, "/") {
+		rmUrl = p.url + id
+	} else {
+		rmUrl = p.url + "/" + id
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, rmUrl, nil)
 	resp, err := p.client.Do(req)
 	if err != nil {
 		return err

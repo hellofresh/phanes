@@ -18,7 +18,7 @@ var removeCmd = &cobra.Command{
 			return
 		}
 
-		id, err := cmd.Flags().GetString("name")
+		id, err := cmd.Flags().GetString("id")
 		if err != nil || id == "" {
 			color.Red("Please provide the id of the client")
 			return
