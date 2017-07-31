@@ -2,6 +2,7 @@ package provider
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -9,11 +10,11 @@ import (
 	"os"
 	"time"
 
-	"encoding/json"
+	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/hellofresh/phanes/pkg/generator"
-	uuid "github.com/satori/go.uuid"
+	"github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 )
 
 // HelloFreshClient represents the hellofresh client
@@ -29,7 +30,7 @@ func (c *HelloFreshClient) GetID() string {
 	return c.ID.String()
 }
 
-// GetSecret retreives the client's secret
+// GetSecret retrieves the client's secret
 func (c *HelloFreshClient) GetSecret() string {
 	return c.Secret
 }
@@ -67,7 +68,7 @@ func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", p.url, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequest(http.MethodPost, p.url, bytes.NewBuffer(jsonStr))
 	resp, err := p.client.Do(req)
 	if err != nil {
 		return nil, err
@@ -78,7 +79,7 @@ func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		resp.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
 
-		log.Debug(string(bodyBytes))
+		log.WithFields(log.Fields{"status": resp.StatusCode, "headers": resp.Header, "body": string(bodyBytes)})
 		return nil, errors.New("Client not created")
 	}
 
@@ -87,7 +88,14 @@ func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 
 // Remove a client
 func (p *HelloFresh) Remove(id string) error {
-	req, err := http.NewRequest("DELETE", p.url+id, nil)
+	var rmUrl string
+	if strings.HasSuffix(p.url, "/") {
+		rmUrl = p.url + id
+	} else {
+		rmUrl = p.url + "/" + id
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, rmUrl, nil)
 	resp, err := p.client.Do(req)
 	if err != nil {
 		return err
