@@ -56,7 +56,12 @@ func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 	log.SetLevel(log.DebugLevel)
 
 	client := new(HelloFreshClient)
-	client.ID = uuid.NewV4()
+	ID, err := uuid.NewV4()
+	if err != nil {
+		return nil, err
+	}
+
+	client.ID = ID
 	client.Secret = fmt.Sprintf("%x", generator.GenerateSecret(client.ID.String()))
 	client.Extra = name
 	client.RedirectURI = redirectURI
