@@ -1,18 +1,18 @@
 language: go
 
 go:
-  - 1.x
-  - 1.7
+  - "1.10"
+  - "stable"
 
 install:
   - mkdir -p $GOPATH/bin
   - make deps
 
 script:
-- make test
+  - make test
 
 before_deploy:
-- make
+  - make
 
 deploy:
   - provider: releases
