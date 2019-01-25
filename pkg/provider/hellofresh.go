@@ -8,12 +8,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
-	"strings"
-
+	"github.com/gofrs/uuid"
 	"github.com/hellofresh/phanes/pkg/generator"
-	"github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -43,11 +42,7 @@ type HelloFresh struct {
 
 // NewHelloFresh creates a new instance of HelloFresh
 func NewHelloFresh(url string) *HelloFresh {
-	return &HelloFresh{
-		url,
-		&http.Client{
-			Timeout: time.Second * 10,
-		}}
+	return &HelloFresh{url, &http.Client{Timeout: time.Second * 10}}
 }
 
 // Create a client
@@ -56,7 +51,7 @@ func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 	log.SetLevel(log.DebugLevel)
 
 	client := new(HelloFreshClient)
-	client.ID = uuid.NewV4()
+	client.ID = uuid.Must(uuid.NewV4())
 	client.Secret = fmt.Sprintf("%x", generator.GenerateSecret(client.ID.String()))
 	client.Extra = name
 	client.RedirectURI = redirectURI
@@ -80,7 +75,7 @@ func (p *HelloFresh) Create(name string, redirectURI string) (Client, error) {
 		resp.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
 
 		log.WithFields(log.Fields{"status": resp.StatusCode, "headers": resp.Header, "body": string(bodyBytes)})
-		return nil, errors.New("Client not created")
+		return nil, errors.New("client not created")
 	}
 
 	return client, nil
@@ -104,10 +99,10 @@ func (p *HelloFresh) Remove(id string) error {
 
 	switch resp.StatusCode {
 	case http.StatusNotFound:
-		return errors.New("Client not found")
+		return errors.New("client not found")
 	case http.StatusNoContent:
 		return nil
 	default:
-		return errors.New("Client not deleted")
+		return errors.New("client not deleted")
 	}
 }
