@@ -16,9 +16,9 @@ GO_PROJECT_PACKAGES=`go list ./... | grep -v /vendor/`
 all: clean deps build
 
 deps:
-	@echo "$(OK_COLOR)==> Installing glide dependencies$(NO_COLOR)"
-	@curl https://glide.sh/get | sh
-	@glide install
+	@echo "$(OK_COLOR)==> Installing dependencies$(NO_COLOR)"
+	@go get -u github.com/golang/dep/cmd/dep
+	@dep ensure -v -vendor-only
 
 # Builds the project
 build: install
@@ -30,7 +30,7 @@ install:
 
 test:
 	go test ${GO_PROJECT_PACKAGES} -v
-	
+
 # Cleans our project: deletes binaries
 clean:
 	@echo "$(OK_COLOR)==> Cleaning project$(NO_COLOR)"
